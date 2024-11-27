@@ -14,6 +14,31 @@ symbol_count = {
     "D" : 8,
 }
 
+symbol_value = {
+    "A" : 5,
+    "B" : 4,
+    "C" : 3,
+    "D" : 2,
+}
+
+def check_winnings(columns, lines, bet, values):
+    winning = 0
+    winning_line = []
+    for line in range(lines):
+        symbol = columns[0][line] # first symbol in each line is column[0]
+        for column in columns:
+            symbol_to_check = column[line] # if check row[2], it's going to check the column[2] which locates in row[2]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winning += values[symbol] * bet
+            winning_line.append(line + 1)
+
+    return winning, winning_line
+#The values parameter in check_winnings() is passed as the symbol_value dictionary,
+# which maps each symbol to its corresponding value,
+
+
 
 def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
@@ -44,9 +69,6 @@ def print_slot_machine(columns):
                 print(column[row], end = "" )
 
         print() # change line, because end default
-
-
-
 
 
 
@@ -101,21 +123,37 @@ def get_bet():
 
     return amount
 
-
-def main():
-    balance = deposit()
+def spin(balance):
     lines = get_number_of_lines()
     while True:
-       bet = get_bet()
-       total_bet = bet * lines
+        bet = get_bet()
+        total_bet = bet * lines
 
-       if total_bet > balance:
-        print(f"You don't have enough amount. Your current amount is {balance}.")
-       else:
-           break
+        if total_bet > balance:
+            print(f"You don't have enough amount. Your current amount is {balance}.")
+        else:
+            break
+
     print(f"You are betting €{bet} on {lines} lines. Total bet is equal to: €{total_bet}.")
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
+    winning, winning_line = check_winnings(slots, lines, bet, symbol_value)
+    print(f"You won {winning}.")
+    print(f"you won on lines: ", *winning_line)
+    return winning - total_bet
+
+
+def main():
+    balance = deposit()
+    while True:
+        print(f"Current balance is €{balance}.")
+        answer = input("Press anything to play(q to quit).")
+        if answer == "q":
+            break
+        balance += spin(balance)
+
+    print(f"You left with ${balance}.")
+
 
 main()
