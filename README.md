@@ -1,4 +1,5 @@
 Slot Machine Game
+The project was built by following a tutorial by Tim. The original code can be found in their GitHub repository here: (https://github.com/techwithtim). 
 A simple Python terminal game where you deposit money, place bets, and spin to win based on matching symbols.
 
 Features
